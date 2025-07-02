@@ -1,0 +1,10 @@
+CREATE TABLE candidates(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name varchar(100) NOT NULL UNIQUE,
+    bio TEXT NOT NULL,
+    photo varchar(255),
+    election_id INT NOT NULL,
+    FOREIGN KEY (election_id) REFERENCES elections(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)
