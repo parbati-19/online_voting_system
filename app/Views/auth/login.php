@@ -11,6 +11,13 @@ include_once 'app/Views/layouts/header.php';
                 </h1>
             </div>
 
+            <?php if (!empty($_SESSION['message'])): ?>
+            <div class="mb-4 rounded-md bg-green-100 p-4 border border-green-300 text-green-800">
+                <?= htmlspecialchars($_SESSION['message']) ?>
+                <?php unset($_SESSION['message']); ?>
+            </div>
+            <?php endif; ?>
+
             <div class="m-2 p-2">
                 <form action="index.php?url=auth/login" method="POST">
                     <div class="flex flex-col items-start">
@@ -42,7 +49,7 @@ include_once 'app/Views/layouts/header.php';
                             <label for="remember-me">Remember me</label>
                         </div>
                         <div>
-                            <a href="forgotpassword.php">Forgot password?</a>
+                            <a href="index.php?url=auth/forgotpassword.php">Forgot password?</a>
                         </div>
                     </div>
                     <div

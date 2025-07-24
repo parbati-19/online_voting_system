@@ -1,15 +1,12 @@
-<?php
-require_once "app/Views/layouts/header.php";
-?>
+<?php require_once "app/Views/layouts/header.php"; ?>
 
-<div class="bg-gray-100 h-screen flex">
+<div class="bg-gray-100 min-h-screen flex">
 
     <!-- Sidebar -->
     <aside class="w-64 bg-white shadow-md p-4 space-y-6">
-        <h1 class="text-2xl font-bold text-gray-700">Admin Dasboard</h1>
+        <h1 class="text-2xl font-bold text-gray-700">Admin Dashboard</h1>
         <nav class="flex flex-col space-y-2">
             <a href="index.php?url=admin/dashboard" class="text-gray-700 hover:text-blue-500">Dashboard</a>
-            <!-- <a href="index.php?url=voter/index" class="text-gray-700 hover:text-blue-500">Users</a> -->
             <a href="index.php?url=election/index" class="text-gray-700 hover:text-blue-500">Elections</a>
             <a href="index.php?url=candidate/index" class="text-gray-700 hover:text-blue-500">Candidates</a>
             <a href="index.php?url=auth/logout" class="text-red-600 hover:text-red-800">Logout</a>
@@ -18,7 +15,6 @@ require_once "app/Views/layouts/header.php";
 
     <!-- Main Content -->
     <div class="flex-1 flex flex-col">
-
         <!-- Topbar -->
         <header class="bg-white shadow p-4 flex justify-between items-center">
             <h2 class="text-xl font-semibold">Dashboard</h2>
@@ -34,19 +30,19 @@ require_once "app/Views/layouts/header.php";
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="bg-white p-4 rounded-lg shadow">
                     <h4 class="text-gray-500">Total Voters</h4>
-                    <p class="text-2xl font-bold">1200</p>
+                    <p class="text-2xl font-bold"><?= $totalVoters ?? 0 ?></p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h4 class="text-gray-500">Total Votes Cast</h4>
+                    <p class="text-2xl font-bold"><?= $totalVotes ?? 0 ?></p>
                 </div>
                 <div class="bg-white p-4 rounded-lg shadow">
                     <h4 class="text-gray-500">Active Elections</h4>
-                    <p class="text-2xl font-bold">3</p>
-                </div>
-                <div class="bg-white p-4 rounded-lg shadow">
-                    <h4 class="text-gray-500">Messages</h4>
-                    <p class="text-2xl font-bold">18</p>
+                    <p class="text-2xl font-bold"><?= $activeElectionsCount ?? 0 ?></p>
                 </div>
             </div>
 
-            <!-- Table Section -->
+            <!-- Recent Voters Table -->
             <h3 class="text-lg font-semibold mt-10 mb-4">Recent Voters</h3>
             <div class="overflow-x-auto bg-white rounded-lg shadow">
                 <table class="min-w-full text-left text-sm">
@@ -58,22 +54,62 @@ require_once "app/Views/layouts/header.php";
                         </tr>
                     </thead>
                     <tbody>
+                        <?php if (!empty($recentVoters)): ?>
+                        <?php foreach ($recentVoters as $voter): ?>
                         <tr class="border-t">
-                            <td class="px-4 py-2">John Doe</td>
-                            <td class="px-4 py-2">john@example.com</td>
-                            <td class="px-4 py-2">1998-04-23</td>
+                            <td class="px-4 py-2"><?= htmlspecialchars($voter['name']) ?></td>
+                            <td class="px-4 py-2"><?= htmlspecialchars($voter['email']) ?></td>
+                            <td class="px-4 py-2"><?= htmlspecialchars($voter['dob']) ?></td>
                         </tr>
+                        <?php endforeach; ?>
+                        <?php else: ?>
                         <tr class="border-t">
-                            <td class="px-4 py-2">Jane Smith</td>
-                            <td class="px-4 py-2">jane@example.com</td>
-                            <td class="px-4 py-2">1995-12-11</td>
+                            <td colspan="3" class="px-4 py-2 text-gray-500">No voters yet.</td>
                         </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- All Elections Table -->
+            <h3 class="text-lg font-semibold mt-10 mb-4">All Elections</h3>
+            <div class="overflow-x-auto bg-white rounded-lg shadow">
+                <table class="min-w-full text-left text-sm">
+                    <thead class="bg-gray-100 text-gray-600">
+                        <tr>
+                            <th class="px-4 py-2">Title</th>
+                            <th class="px-4 py-2">Start Date</th>
+                            <th class="px-4 py-2">End Date</th>
+                            <th class="px-4 py-2">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($elections)): ?>
+                        <?php foreach ($elections as $election): ?>
+                        <tr class="border-t">
+                            <td class="px-4 py-2"><?= htmlspecialchars($election['title']) ?></td>
+                            <td class="px-4 py-2"><?= htmlspecialchars($election['start_date']) ?></td>
+                            <td class="px-4 py-2"><?= htmlspecialchars($election['end_date']) ?></td>
+                            <td class="px-4 py-2 font-semibold <?= match($election['status']) {
+                                        'active' => 'text-green-600',
+                                        'ended' => 'text-red-600',
+                                        'upcoming' => 'text-yellow-600',
+                                        default => 'text-gray-500'
+                                    } ?>">
+                                <?= htmlspecialchars(ucfirst($election['status'])) ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                        <?php else: ?>
+                        <tr class="border-t">
+                            <td colspan="4" class="px-4 py-2 text-gray-500">No elections available.</td>
+                        </tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
         </main>
     </div>
 </div>
-<?php
-    require_once "app/Views/layouts/footer.php";
-?>
+
+<?php require_once "app/Views/layouts/footer.php"; ?>

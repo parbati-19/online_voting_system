@@ -39,14 +39,14 @@ class Election extends Model
 
     public function store($data)
     {
-        $stmt = $this->db->prepare("INSERT INTO elections (title,description,start_date,end_date,statuss) VALUES (?,?,?,?,?)");
+        $stmt = $this->db->prepare("INSERT INTO elections (title,description,start_date,end_date,status) VALUES (?,?,?,?,?)");
         $stmt->bind_param('sssss', $data['title'], $data['description'], $data['start_date'], $data['end_date'], $data['status']);
         return $stmt->execute();
     }
 
     public function update($id, $data)
     {
-        $stmt = $this->db->prepare("UPDATE elections SET title = ?, description = ?, start_date = ?, end_date = ?, statuss = ? WHERE id = ?");
+        $stmt = $this->db->prepare("UPDATE elections SET title = ?, description = ?, start_date = ?, end_date = ?, status = ? WHERE id = ?");
         $stmt->bind_param("sssssi", $data['title'], $data['description'], $data['start_date'], $data['end_date'], $data['status'], $id);
         return $stmt->execute();
     }

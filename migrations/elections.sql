@@ -4,7 +4,7 @@ CREATE TABLE elections(
     description TEXT ,
     start_date DATE,
     end_date DATE,
-    statuss enum
+    status ENUM('active', 'ended', 'upcoming') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )

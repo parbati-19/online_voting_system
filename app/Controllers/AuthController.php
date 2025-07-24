@@ -74,6 +74,10 @@ class AuthController extends Controller
         $this->view('auth/login');
     }
 
+    public function forgotpassword(){
+        $this->view('auth/forgot-password');
+    }
+
     public function register()
     {
         // works only when coming a Post method from the register form
@@ -129,7 +133,7 @@ class AuthController extends Controller
             //attempting to register an user  
             if ($this->model->register($data)) {
                 $_SESSION['message'] = 'User registered successfully , go to login !';
-                header('Location: index.php?url=auth/register');
+                header('Location: index.php?url=auth/login');
                 exit;
             } else {
                 $errors['message'] = 'registration failed !';

@@ -38,35 +38,39 @@ class voterController extends Controller
 
         $election = $this->model('Election')->getById($electionId);
         $candidates = $this->model('Candidate')->getByElectionId($electionId);
-        $this->view('voter/ballots/index', ['election' => $election, 'candidates' => $candidates]);
+        $this->view('voter/ballots/index', ['election' => $election, 'candidates' => $candidates, 'user_id' => $userId]);
     }
 
     public function vote()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $userId = $_SESSION['user']['id'] ?? null;
+
             $data = [
-                'user_id' => $_POST['user_id'],
+                'user_id' => $userId,
                 'election_id' => $_POST['election_id'],
                 'candidate_id' => $_POST['candidate_id'],
             ];
 
-            if ($this->model->hasVoted($data['userId'], $data['electionId'])) {
-                $_SESSION['message'] = "You have already voted for this election! ";
+            if (!$userId) {
+                echo "User is not logged in.";
+                return;
+            }
+
+            if ($this->model->hasVoted($userId, $data['election_id'])) {
+                $_SESSION['message'] = "You have already voted for this election!";
                 header('Location: index.php?url=vote/index');
                 return;
             }
 
             if ($this->model->store($data)) {
-                header("Location: index.php?url=voter/thankyou");
+                $_SESSION['message'] = 'Vote cast successfully, Thank you for your vote!';
+                header('Location: index.php?url=voter/index');
+                exit;
             } else {
                 echo "Error while casting vote.";
             }
         }
     }
 
-    public function thanyou()
-    {
-        echo "Thankyou for your vote! ";
-        $this->view("voter/ballot/index");
-    }
 }

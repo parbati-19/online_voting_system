@@ -18,20 +18,27 @@ include_once 'app/Views/layouts/header.php';
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <?php if (!empty($elections) && is_array($elections)): ?>
         <?php foreach ($elections as $election): ?>
+        <?php
+                $status = $election['status'] ?? null;
+                $color = match ($status) {
+                    'active' => 'text-green-600',
+                    'ended' => 'text-red-600',
+                    'upcoming' => 'text-yellow-600',
+                    default => 'text-gray-500',
+                };
+                ?>
         <div class="bg-white p-4 rounded shadow">
             <h3 class="text-xl font-semibold"><?= htmlspecialchars($election['title']) ?></h3>
             <p class="text-gray-600">Start: <?= htmlspecialchars($election['start_date']) ?></p>
             <p class="text-gray-600">End: <?= htmlspecialchars($election['end_date']) ?></p>
-            <p
-                class="text-sm mt-2 font-semibold 
-                    <?= isset($election['statuss']) && $election['statuss'] === 'active' ? 'text-green-600' : 'text-gray-500' ?>">
-                Status: <?= isset($election['statuss']) ? ucfirst($election['statuss']) : 'Unknown' ?>
+            <p class="text-sm mt-2 font-semibold <?= $color ?>">
+                Status: <?= $status ? ucfirst($status) : 'Unknown' ?>
             </p>
-            <a href="index.php?url=election/edit/<?= htmlspecialchars($election['id'] )?>"
+            <a href="index.php?url=election/edit/<?= htmlspecialchars($election['id']) ?>"
                 class="inline-block mt-3 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
                 Edit
             </a>
-            <a href="index.php?url=election/delete/<?= htmlspecialchars($election['id'] )?>"
+            <a href="index.php?url=election/delete/<?= htmlspecialchars($election['id']) ?>"
                 class="inline-block mt-3 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">
                 Delete
             </a>

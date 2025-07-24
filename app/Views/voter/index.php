@@ -5,6 +5,12 @@
     <p class="font-bold text-center">Welcome, <?= htmlspecialchars($_SESSION['user']['username']) ?>! <a
             href="index.php?url=auth/logout">Logout</a>
     </p>
+    <?php if (!empty($_SESSION['message'])): ?>
+    <div class="mb-4 rounded-md bg-green-100 p-4 border border-green-300 text-green-800">
+        <?= htmlspecialchars($_SESSION['message']) ?>
+        <?php unset($_SESSION['message']); ?>
+    </div>
+    <?php endif; ?>
     <p class="text-gray-700 text-center mb-8">
         Your voice matters! Participate in upcoming elections and help shape the future. </p>
 

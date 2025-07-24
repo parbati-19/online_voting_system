@@ -39,11 +39,11 @@
             <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
             <select id="status" name="status" required
                 class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-blue-300">
-                <option value="upcoming" <?= $data['election']['statuss'] === 'upcoming' ? 'selected' : '' ?>>Upcoming
+                <option value="upcoming" <?= $data['election']['status'] === 'upcoming' ? 'selected' : '' ?>>Upcoming
                 </option>
-                <option value="active" <?= $data['election']['statuss'] === 'active' ? 'selected' : '' ?>>Active
+                <option value="active" <?= $data['election']['status'] === 'active' ? 'selected' : '' ?>>Active
                 </option>
-                <option value="ended" <?= $data['election']['statuss'] === 'ended' ? 'selected' : '' ?>>Ended</option>
+                <option value="ended" <?= $data['election']['status'] === 'ended' ? 'selected' : '' ?>>Ended</option>
             </select>
         </div>
 
